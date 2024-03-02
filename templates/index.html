@@ -1,0 +1,94 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Live Data Visualization</title>
+  <script src="https://cdn.plotly.com/2.12.1/plotly.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+
+<body>
+  <div id="dataPlot" style="width:100%;max-width:900px;height:500px;"></div>
+
+  <script>
+    function fetchData() {
+      fetch('/data')
+        .then(response => response.json())
+        .then(data => {
+          const layout = {
+            title: 'Live Data Visualization',
+            xaxis: { type: 'date', title: 'Time' },
+            yaxis: { title: 'Values' },
+            margin: { l: 60, r: 60, t: 50, b: 50 }
+          };
+          const config = { responsive: true };
+          var traces = [];
+
+          ['A1', 'B1', 'C1', 'D1'].forEach(function (columnName) {
+            traces.push({
+              x: data.Time,
+              y: data[columnName],
+              mode: 'lines',
+              name: columnName
+            });
+          });
+
+          Plotly.newPlot('dataPlot', traces, layout, config);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    // Fetch and update the plot every 5 seconds
+    setInterval(fetchData, 500);
+    fetchData(); // Initial fetch
+  </script>
+
+</body>
+
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Live Data Visualization</title>
+  <script src="https://cdn.plotly.com/2.12.1/plotly.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+
+<body>
+  <div id="dataPlot" style="width:100%;max-width:900px;height:500px;"></div>
+
+  <script>
+    function fetchData() {
+      fetch('/data')
+        .then(response => response.json())
+        .then(data => {
+          const traceAverage = {
+            x: data.Time,
+            y: data.Average,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Average'
+          };
+          const layout = {
+            title: 'Average of A1, B1, C1, D1 Over Time',
+            xaxis: { type: 'date', title: 'Time' },
+            yaxis: { title: 'Average Value', range: [0, 5] }, // Setting Y-axis range from 0 to 10
+            margin: { l: 60, r: 60, t: 50, b: 50 }
+          };
+          Plotly.react('dataPlot', [traceAverage], layout); // Using Plotly.react for efficient redrawing
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    // Fetch and update the plot every 5 seconds
+    setInterval(fetchData, 200);
+    fetchData(); // Initial fetch
+  </script>
+</body>
+
+</html>
